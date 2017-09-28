@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+
+  <head>
+
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.3.3/css/ol.css" type="text/css">
+
+    <!-- grandezza mappa -->
+    <style>
+      .map {
+        height: 900px;
+        width: 100%;
+      }
+    </style>
+
+    <script src="https://openlayers.org/en/v4.3.3/build/ol.js" type="text/javascript"></script>
+
+    <title>My semi transparent</title>
+
+  </head>
+
+
+
+  <body>
+
+    <div id="map" class="map"></div>
+
+    <script type="text/javascript">
+
+      var vectorSource = new ol.source.Vector({});
+
+
+      var map = new ol.Map({
+
+        // "attacca" l'ggetto mappa al div in xml definito sopra
+        target: 'map',
+
+        // array contenente tutti i layers
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          new ol.layer.Vector({
+            source: vectorSource
+          })
+        ],
+
+
+        view: new ol.View({
+          center: ol.proj.fromLonLat([12.71, 45.887]),
+          zoom: 15
+        })
+      });
+
+      var thing = new ol.geom.Polygon( [[
+          ol.proj.transform([12.70444444,45.88944444], 'EPSG:4326', 'EPSG:3857'),
+          ol.proj.transform([12.71555556,45.88944444], 'EPSG:4326', 'EPSG:3857'),
+          ol.proj.transform([12.71555556,45.88500000], 'EPSG:4326', 'EPSG:3857'),
+          ol.proj.transform([12.70444444,45.88500000], 'EPSG:4326', 'EPSG:3857'),
+      ]]);
+      var featurething = new ol.Feature({
+          name: "Thing",
+          geometry: thing
+      });
+      vectorSource.addFeature( featurething );
+
+
+    </script>
+
+  </body>
+</html>

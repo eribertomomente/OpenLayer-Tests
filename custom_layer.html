@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+
+  <head>
+
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.3.3/css/ol.css" type="text/css">
+
+    <!-- grandezza mappa -->
+    <style>
+      .map {
+        height: 900px;
+        width: 100%;
+      }
+    </style>
+
+    <script src="https://openlayers.org/en/v4.3.3/build/ol.js" type="text/javascript"></script>
+
+    <title>Layer Map</title>
+
+  </head>
+
+
+
+  <body>
+
+    <div id="map" class="map"></div>
+
+    <script type="text/javascript">
+
+      var rasterLayer = new ol.layer.Tile({
+        source: new ol.source.TileJSON({
+          url: 'https://api.tiles.mapbox.com/v3/mapbox.natural-earth-hypso-bathy.json?secure'
+        })
+      });
+
+      var map = new ol.Map({
+
+        // "attacca" l'ggetto mappa al div in xml definito sopra
+        target: 'map',
+
+        // array contenente tutti i layers
+        layers: [ rasterLayer ],
+
+
+        view: new ol.View({
+          center: ol.proj.fromLonLat([13.236803, 46.0622]),
+          zoom: 5
+        })
+      });
+    </script>
+
+  </body>
+</html>
