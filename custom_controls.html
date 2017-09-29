@@ -59,21 +59,11 @@
        * @extends {ol.control.Control}
        * @param {Object=} opt_options Control options.
        */
-      app.RotateControl = function(opt_options, orientation) {
+      app.RotateControl = function(opt_options, orientation, label) {
 
         var options = opt_options || {};
 
         var button = document.createElement('button');
-
-        var label = '';
-
-        if (orientation == '0'){
-          label = 'N';
-        } else if (orientation == '4'){
-          label = 'S';
-        } else {
-          label = '-';
-        }
 
         button.innerHTML = label;
 
@@ -81,17 +71,21 @@
 
 
         var handleRotate = function(e) {
-          this_.getMap().getView().setRotation(0);
+          this_.getMap().getView().setRotation(orientation);
         };
 
-        button.addEventListener('click', handleRotateNorth, false);
-        button.addEventListener('touchstart', handleRotateNorth, false);
+        button.addEventListener('click', handleRotate, false);
+        button.addEventListener('touchstart', handleRotate, false);
 
         var element = document.createElement('div');
-        element.className = 'ol-unselectable ol-control';
-        if(....) {
+        element.className = 'ol-unselectable ol-control ';
+        if (orientation == 4){
+          element.className += 'rotate-south';
+        } else {
           element.className += 'rotate-north';
         }
+        
+          
         element.appendChild(button);
 
         ol.control.Control.call(this, {
@@ -101,40 +95,8 @@
 
       };
 
-      ol.inherits(app.RotateNorthControl, ol.control.Control);
+      ol.inherits(app.RotateControl, ol.control.Control);
 
-      /**
-      * @constructor
-      * @extends {ol.control.Control}
-      * @param {Object=} opt_options Control options.
-      */
-      app.RotateSouthControl = function(opt_options) {
-
-        var options = opt_options || {};
-
-        var button = document.createElement('button');
-        button.innerHTML = 'S';
-
-        var this_ = this;
-        var handleRotateSouth = function(e) {
-          this_.getMap().getView().setRotation(4);
-        };
-
-        button.addEventListener('click', handleRotateSouth, false);
-        button.addEventListener('touchstart', handleRotateSouth, false);
-
-        var element = document.createElement('div');
-        element.className = 'rotate-south ol-unselectable ol-control';
-        element.appendChild(button);
-
-        ol.control.Control.call(this, {
-          element: element,
-          target: options.target
-        });
-
-      };
-
-      ol.inherits(app.RotateSouthControl, ol.control.Control);
 
       var map = new ol.Map({
 
@@ -152,7 +114,10 @@
           attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
             collapsible: false
           })
-        }).extend([ new app.RotateControl({}, '0'), new app.RotateControl({}, '4')]),
+        }).extend([ 
+          new app.RotateControl({}, '0', 'N'), 
+          new app.RotateControl({}, '4', 'S')
+        ]),
 
         view: new ol.View({
           center: ol.proj.fromLonLat([13.236803, 46.0622]),
